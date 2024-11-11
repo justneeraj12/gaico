@@ -1,101 +1,208 @@
-import Image from "next/image";
+'use client'
+
+import { useState, useEffect } from 'react'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import Link from 'next/link'
+import { motion } from 'framer-motion'
+import { Lightbulb, Rocket, BanknoteIcon } from 'lucide-react'
+
+const words = ["Future_", "Innovation_", "Disruption_", "Breakthroughs_"];
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [displayText, setDisplayText] = useState('');
+  const [wordIndex, setWordIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  
+  useEffect(() => {
+    const word = words[wordIndex];
+    const updateText = () => {
+      if (isDeleting) {
+        if (displayText.length === 0) {
+          setIsDeleting(false);
+          setWordIndex((prev) => (prev + 1) % words.length);
+        } else {
+          setDisplayText(word.substring(0, displayText.length - 1));
+        }
+      } else {
+        if (displayText.length === word.length) {
+          setTimeout(() => setIsDeleting(true), 2000);
+        } else {
+          setDisplayText(word.substring(0, displayText.length + 1));
+        }
+      }
+    };
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+    const timer = setTimeout(updateText, isDeleting ? 100 : 200);
+    return () => clearTimeout(timer);
+  }, [wordIndex, isDeleting, displayText]);
+
+  return (
+    <div className="min-h-screen bg-green-950 relative overflow-hidden">
+      <Header />
+      
+      {/* Hero Section */}
+      <main className="pt-24 relative z-10">
+        <section className="min-h-[80vh] flex items-center justify-center px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.h1 
+              className="text-7xl font-bold text-white mb-6"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              We Fund The{' '}
+              <span className="text-green-400 inline-block min-w-[320px]">
+                {displayText}
+                <span className="animate-pulse">|</span>
+              </span>
+            </motion.h1>
+            <motion.p 
+              className="text-xl text-green-100 mb-12 max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              Greenville Angel Investment Co. provides seed funding, expert consulting, 
+              and comprehensive startup incubation services to transform innovative ideas 
+              into market-leading companies.
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <Link 
+                href="/apply" 
+                className="inline-block bg-green-400 text-green-950 px-8 py-3 rounded-full text-lg font-semibold hover:bg-green-300 transition-colors hover:scale-105 transform"
+              >
+                Pitch Your Startup!
+              </Link>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Stats Section */}
+        <section className="py-20 px-4">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+            <motion.div 
+              className="bg-green-900/20 p-8 rounded-lg text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h3 className="text-5xl font-bold text-green-400 mb-2">10+</h3>
+              <p className="text-green-100">Portfolio Companies</p>
+            </motion.div>
+            <motion.div 
+              className="bg-green-900/20 p-8 rounded-lg text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              <h3 className="text-5xl font-bold text-green-400 mb-2">$2M</h3>
+              <p className="text-green-100">Assets Under Management</p>
+            </motion.div>
+            <motion.div 
+              className="bg-green-900/20 p-8 rounded-lg text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <h3 className="text-5xl font-bold text-green-400 mb-2">85%</h3>
+              <p className="text-green-100">Success Rate</p>
+            </motion.div>
+            <motion.div 
+              className="bg-green-900/20 p-8 rounded-lg text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <h3 className="text-5xl font-bold text-green-400 mb-2">24/7</h3>
+              <p className="text-green-100">Founder Support</p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Services Section */}
+        <section className="py-20 px-4 bg-green-900/20">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-4xl font-bold text-center text-white mb-16">Our Services</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <motion.div 
+                className="bg-green-950 p-8 rounded-lg"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <BanknoteIcon className="w-12 h-12 text-green-400 mb-4" />
+                <h3 className="text-xl font-bold text-white mb-4">Seed Funding</h3>
+                <p className="text-green-100">
+                  Initial capital to transform your idea into a viable product, 
+                  with investments ranging from $50K to $500K.
+                </p>
+              </motion.div>
+              <motion.div 
+                className="bg-green-950 p-8 rounded-lg"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                <Lightbulb className="w-12 h-12 text-green-400 mb-4" />
+                <h3 className="text-xl font-bold text-white mb-4">Consulting</h3>
+                <p className="text-green-100">
+                  Strategic guidance from industry experts to optimize your business 
+                  model and accelerate growth.
+                </p>
+              </motion.div>
+              <motion.div 
+                className="bg-green-950 p-8 rounded-lg"
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <Rocket className="w-12 h-12 text-green-400 mb-4" />
+                <h3 className="text-xl font-bold text-white mb-4">Incubation</h3>
+                <p className="text-green-100">
+                  Comprehensive support including workspace, mentorship, and access to 
+                  our network of industry leaders.
+                </p>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Advantage Section */}
+        <section className="py-20 px-4">
+          <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h2 className="text-3xl font-bold text-white mb-6">The Greenville Advantage</h2>
+              <p className="text-green-100">
+                We're not just investors - we're partners in your success journey. 
+                Our unique approach combines capital with deep industry expertise 
+                and a proven track record of scaling startups.
+              </p>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              className="flex justify-center"
+            >
+              <div className="w-64 h-64 relative">
+                {/* Puzzle piece illustration would go here */}
+                <div className="absolute inset-0 bg-gradient-to-br from-green-400 to-green-600 opacity-20 rounded-lg" />
+              </div>
+            </motion.div>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      <Footer />
     </div>
-  );
+  )
 }
