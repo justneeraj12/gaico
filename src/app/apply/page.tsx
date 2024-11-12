@@ -1,21 +1,16 @@
-"use client"
-
-import Header from '../components/Header';
-import { Button } from "../components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
-import { Textarea } from "../components/ui/textarea";
-import { useRef } from 'react';
+import Header from '../components/Header'
+import Footer from '../components/Footer' // Import the footer component
+import { Button } from "../components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
+import { Input } from "../components/ui/input"
+import { Label } from "../components/ui/label"
+import { Textarea } from "../components/ui/textarea"
 
 export default function Apply() {
-  const servicesRef = useRef(null);
-  const contactRef = useRef(null);
-
   return (
-    <div className="min-h-screen">
-      <Header servicesRef={servicesRef} contactRef={contactRef} />
-      <main className="pt-24 px-4 pb-12">
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <main className="flex-grow pt-24 px-4 pb-12">
         <div className="max-w-3xl mx-auto">
           <Card className="bg-green-900/30 border-green-800/50 backdrop-blur-md shadow-xl">
             <CardHeader>
@@ -58,6 +53,7 @@ export default function Apply() {
           </Card>
         </div>
       </main>
+      <Footer /> {/* Add Footer component here */}
     </div>
-  );
+  )
 }
