@@ -2,15 +2,33 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { Leaf } from 'lucide-react'
 
-export default function Header() {
+interface HeaderProps {
+  servicesRef: React.RefObject<HTMLElement>;
+  contactRef: React.RefObject<HTMLElement>;
+}
+
+export default function Header({ servicesRef, contactRef }: HeaderProps) {
   const pathname = usePathname()
+  const { scrollYProgress } = useScroll()
+  const backgroundColor = useTransform(
+    scrollYProgress,
+    [0, 0.1],
+    ["rgba(6, 78, 59, 0)", "rgba(6, 78, 59, 0.9)"]
+  )
+
+  const scrollToRef = (ref: React.RefObject<HTMLElement>) => {
+    if (ref && ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   return (
     <motion.header 
-      className="fixed w-full bg-green-950/90 backdrop-blur-sm z-50"
+      className="fixed w-full backdrop-blur-sm z-50"
+      style={{ backgroundColor }}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
@@ -31,13 +49,21 @@ export default function Header() {
               <Link href="/about" className={`text-green-100 hover:text-green-400 transition-colors ${pathname === '/about' ? 'text-green-400' : ''}`}>About</Link>
             </motion.li>
             <motion.li whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Link href="/#services" className="text-green-100 hover:text-green-400 transition-colors">Services</Link>
+              {pathname === '/' ? (
+                <button onClick={() => scrollToRef(servicesRef)} className="text-green-100 hover:text-green-400 transition-colors">Services</button>
+              ) : (
+                <Link href="/#services" className="text-green-100 hover:text-green-400 transition-colors">Services</Link>
+              )}
             </motion.li>
             <motion.li whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
               <Link href="/portfolio" className={`text-green-100 hover:text-green-400 transition-colors ${pathname === '/portfolio' ? 'text-green-400' : ''}`}>Portfolio</Link>
             </motion.li>
             <motion.li whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Link href="/#contact" className="text-green-100 hover:text-green-400 transition-colors">Contact</Link>
+              {pathname === '/' ? (
+                <button onClick={() => scrollToRef(contactRef)} className="text-green-100 hover:text-green-400 transition-colors">Contact</button>
+              ) : (
+                <Link href="/#contact" className="text-green-100 hover:text-green-400 transition-colors">Contact</Link>
+              )}
             </motion.li>
             <motion.li whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link 

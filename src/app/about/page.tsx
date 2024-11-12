@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef } from 'react'
 import { motion } from 'framer-motion'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -7,6 +8,7 @@ import { Input } from "../components/ui/input"
 import { Textarea } from "../components/ui/textarea"
 import { Button } from "../components/ui/button"
 import { Card } from "../components/ui/card"
+import Image from 'next/image'
 
 const timelineEvents = [
   { year: "2020", title: "Foundation", description: "Greenville Angel Investment Co. was established with a vision to support innovative startups." },
@@ -18,15 +20,15 @@ const timelineEvents = [
 
 const founders = [
   {
-    name: "Dr. Timothy Dudly",
+    name: "Sarah Johnson",
     role: "Founder & CEO",
     bio: "Former VP at Goldman Sachs with 15+ years of investment experience.",
     image: "/placeholder.svg?height=400&width=400"
   },
   {
-    name: "Adv. Shan Russel",
+    name: "Michael Chen",
     role: "Co-Founder & CTO",
-    bio: "Legal Advisor and Strategist.",
+    bio: "Serial entrepreneur with multiple successful exits in the tech sector.",
     image: "/placeholder.svg?height=400&width=400"
   },
   {
@@ -38,9 +40,12 @@ const founders = [
 ]
 
 export default function About() {
+  const servicesRef = useRef(null);
+  const contactRef = useRef(null);
+
   return (
     <div className="min-h-screen bg-green-950">
-      <Header />
+      <Header servicesRef={servicesRef} contactRef={contactRef} />
       <main className="pt-24 px-4 pb-12">
         <div className="max-w-6xl mx-auto">
           <motion.h1 
@@ -109,9 +114,11 @@ export default function About() {
                   transition={{ delay: index * 0.2 }}
                 >
                   <div className="mb-4 relative mx-auto w-48 h-48 rounded-full overflow-hidden">
-                    <img
+                    <Image
                       src={founder.image}
                       alt={founder.name}
+                      width={192}
+                      height={192}
                       className="object-cover w-full h-full"
                     />
                   </div>

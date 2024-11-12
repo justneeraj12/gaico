@@ -1,4 +1,5 @@
 'use client'
+import { useRef } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { motion } from 'framer-motion'
@@ -13,9 +14,12 @@ const portfolioCompanies = [
 ]
 
 export default function Portfolio() {
+  const servicesRef = useRef(null);
+  const contactRef = useRef(null);
+
   return (
     <div className="min-h-screen bg-green-950">
-      <Header />
+      <Header servicesRef={servicesRef} contactRef={contactRef} />
       <main className="pt-24 px-4 pb-12">
         <div className="max-w-4xl mx-auto">
           <motion.h1 
@@ -32,7 +36,7 @@ export default function Portfolio() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            We're proud to have partnered with these innovative companies that are shaping the future across various industries.
+            We&apos;re proud to have partnered with these innovative companies that are shaping the future across various industries.
           </motion.p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {portfolioCompanies.map((company, index) => (
