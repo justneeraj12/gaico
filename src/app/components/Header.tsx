@@ -1,10 +1,13 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Leaf } from 'lucide-react'
 
 export default function Header() {
+  const pathname = usePathname()
+
   return (
     <motion.header 
       className="fixed w-full bg-green-950/90 backdrop-blur-sm z-50"
@@ -25,19 +28,16 @@ export default function Header() {
         <nav>
           <ul className="flex space-x-8 items-center">
             <motion.li whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Link href="/about" className="text-green-100 hover:text-green-400 transition-colors">About</Link>
+              <Link href="/about" className={`text-green-100 hover:text-green-400 transition-colors ${pathname === '/about' ? 'text-green-400' : ''}`}>About</Link>
             </motion.li>
             <motion.li whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Link href="/services" className="text-green-100 hover:text-green-400 transition-colors">Services</Link>
+              <Link href="/#services" className="text-green-100 hover:text-green-400 transition-colors">Services</Link>
             </motion.li>
             <motion.li whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Link href="/portfolio" className="text-green-100 hover:text-green-400 transition-colors">Portfolio</Link>
+              <Link href="/portfolio" className={`text-green-100 hover:text-green-400 transition-colors ${pathname === '/portfolio' ? 'text-green-400' : ''}`}>Portfolio</Link>
             </motion.li>
             <motion.li whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Link href="/why-us" className="text-green-100 hover:text-green-400 transition-colors">Why Us</Link>
-            </motion.li>
-            <motion.li whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Link href="/contact" className="text-green-100 hover:text-green-400 transition-colors">Contact</Link>
+              <Link href="/#contact" className="text-green-100 hover:text-green-400 transition-colors">Contact</Link>
             </motion.li>
             <motion.li whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link 

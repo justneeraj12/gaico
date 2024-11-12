@@ -6,6 +6,7 @@ import Footer from './components/Footer'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Lightbulb, Rocket, BanknoteIcon } from 'lucide-react'
+import ParticleBackground from './components/ParticleBackground'
 
 const words = ["Future_", "Innovation_", "Disruption_", "Breakthroughs_"];
 
@@ -14,6 +15,7 @@ export default function Home() {
   const [wordIndex, setWordIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   
+
   useEffect(() => {
     const word = words[wordIndex];
     const updateText = () => {
@@ -39,6 +41,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-green-950 relative overflow-hidden">
+      <ParticleBackground />
       <Header />
       
       {/* Hero Section */}
@@ -76,7 +79,7 @@ export default function Home() {
                 href="/apply" 
                 className="inline-block bg-green-400 text-green-950 px-8 py-3 rounded-full text-lg font-semibold hover:bg-green-300 transition-colors hover:scale-105 transform"
               >
-                Pitch Your Startup!
+                Pitch Your Startup
               </Link>
             </motion.div>
           </div>
@@ -125,7 +128,7 @@ export default function Home() {
         </section>
 
         {/* Services Section */}
-        <section className="py-20 px-4 bg-green-900/20">
+        <section id="services" className="py-20 px-4 bg-green-900/20">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-4xl font-bold text-center text-white mb-16">Our Services</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
