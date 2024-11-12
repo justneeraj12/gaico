@@ -8,7 +8,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { Lightbulb, Rocket, BanknoteIcon } from 'lucide-react'
 import ParticleBackground from './components/ParticleBackground'
 
-const words = ["Future", "Innovation", "Disruption", "Breakthroughs"];
+const words = ["Future_", "Innovation_", "Disruption_", "Breakthroughs_"];
 
 export default function Home() {
   const [displayText, setDisplayText] = useState('');
@@ -17,9 +17,6 @@ export default function Home() {
   
   const servicesRef = useRef<HTMLElement>(null);
   const contactRef = useRef<HTMLElement>(null);
-
-  const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   useEffect(() => {
     const word = words[wordIndex];
@@ -49,7 +46,7 @@ export default function Home() {
       <ParticleBackground />
       <Header servicesRef={servicesRef} contactRef={contactRef} />
       
-      <motion.main className="pt-24 relative z-10" style={{ opacity }}>
+      <motion.main className="pt-24 relative z-10">
         <section className="min-h-[80vh] flex items-center justify-center px-4">
           <div className="max-w-4xl mx-auto text-center">
             <motion.h1 
@@ -111,7 +108,14 @@ export default function Home() {
           </div>
         </section>
 
-        <section ref={servicesRef} id="services" className="py-20 px-4 bg-green-900/20">
+        <motion.section 
+          ref={servicesRef} 
+          id="services" 
+          className="py-20 px-4 bg-green-900/20"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
           <div className="max-w-6xl mx-auto">
             <h2 className="text-4xl font-bold text-center text-white mb-16">Our Services</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -134,7 +138,7 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         <section className="py-20 px-4">
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">

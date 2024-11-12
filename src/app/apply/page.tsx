@@ -1,14 +1,20 @@
-import Header from '../components/Header'
-import { Button } from "../components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
-import { Input } from "../components/ui/input"
-import { Label } from "../components/ui/label"
-import { Textarea } from "../components/ui/textarea"
+"use client"
+
+import Header from '../components/Header';
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Textarea } from "../components/ui/textarea";
+import { useRef } from 'react';
 
 export default function Apply() {
+  const servicesRef = useRef(null);
+  const contactRef = useRef(null);
+
   return (
     <div className="min-h-screen">
-      <Header />
+      <Header servicesRef={servicesRef} contactRef={contactRef} />
       <main className="pt-24 px-4 pb-12">
         <div className="max-w-3xl mx-auto">
           <Card className="bg-green-900/30 border-green-800/50 backdrop-blur-md shadow-xl">
@@ -53,5 +59,5 @@ export default function Apply() {
         </div>
       </main>
     </div>
-  )
+  );
 }
