@@ -1,12 +1,17 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { Lightbulb, Rocket, BanknoteIcon, ChevronRight } from 'lucide-react'
+import Link from 'next/link'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import Link from 'next/link'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { Lightbulb, Rocket, BanknoteIcon } from 'lucide-react'
 import ParticleBackground from './components/ParticleBackground'
+import InvestmentCalculator from './components/InvestmentCalculator'
+import SuccessStories from './components/SuccessStories'
+import AnimatedStats from './components/AnimatedStats'
+import FAQ from './components/FAQ'
+import Newsletter from './components/Newsletter'
 
 const words = ["Future_", "Innovation_", "Disruption_", "Breakthroughs_"];
 
@@ -14,9 +19,13 @@ export default function Home() {
   const [displayText, setDisplayText] = useState('');
   const [wordIndex, setWordIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  
+
   const servicesRef = useRef<HTMLElement>(null);
   const contactRef = useRef<HTMLElement>(null);
+
+  // Scroll animation settings (removed opacity from main wrapper)
+  const { scrollYProgress } = useScroll();
+  const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
 
   useEffect(() => {
     const word = words[wordIndex];
@@ -45,9 +54,13 @@ export default function Home() {
     <div className="min-h-screen bg-green-950 relative overflow-hidden">
       <ParticleBackground />
       <Header servicesRef={servicesRef} contactRef={contactRef} />
-      
+
       <motion.main className="pt-24 relative z-10">
-        <section className="min-h-[80vh] flex items-center justify-center px-4">
+        {/* Hero Section */}
+        <motion.section
+          className="min-h-[80vh] flex items-center justify-center px-4"
+          style={{ opacity }}
+        >
           <div className="max-w-4xl mx-auto text-center">
             <motion.h1 
               className="text-7xl font-bold text-white mb-6"
@@ -84,30 +97,12 @@ export default function Home() {
               </Link>
             </motion.div>
           </div>
-        </section>
+        </motion.section>
 
-        <section className="py-20 px-4">
-          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-            {[
-              { title: "10+", description: "Portfolio Companies" },
-              { title: "$2M", description: "Assets Under Management" },
-              { title: "85%", description: "Success Rate" },
-              { title: "24/7", description: "Founder Support" }
-            ].map((stat, index) => (
-              <motion.div 
-                key={stat.title}
-                className="bg-green-900/20 p-8 rounded-lg text-center"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <h3 className="text-5xl font-bold text-green-400 mb-2">{stat.title}</h3>
-                <p className="text-green-100">{stat.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </section>
+        {/* Animated Stats Section */}
+        <AnimatedStats />
 
+        {/* Services Section */}
         <motion.section 
           ref={servicesRef} 
           id="services" 
@@ -140,7 +135,24 @@ export default function Home() {
           </div>
         </motion.section>
 
-        <section className="py-20 px-4">
+        {/* Investment Calculator Section */}
+        <section className="py-20 px-4 bg-green-950">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-4xl font-bold text-center text-white mb-12">Estimate Your Investment</h2>
+            <InvestmentCalculator />
+          </div>
+        </section>
+
+        {/* Success Stories Section */}
+        <section className="py-20 px-4 bg-green-900/20">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-4xl font-bold text-center text-white mb-12">Success Stories</h2>
+            <SuccessStories />
+          </div>
+        </section>
+
+        {/* Greenville Advantage Section */}
+        <section className="py-20 px-4 bg-green-950">
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -148,11 +160,18 @@ export default function Home() {
               transition={{ duration: 0.5 }}
             >
               <h2 className="text-3xl font-bold text-white mb-6">The Greenville Advantage</h2>
-              <p className="text-green-100">
+              <p className="text-green-100 mb-6">
                 We&apos;re not just investors - we&apos;re partners in your success journey. 
                 Our unique approach combines capital with deep industry expertise 
                 and a proven track record of scaling startups.
               </p>
+              <Link 
+                href="/about" 
+                className="inline-flex items-center text-green-400 hover:text-green-300 transition-colors"
+              >
+                Learn more about us
+                <ChevronRight className="ml-2 w-4 h-4" />
+              </Link>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -166,6 +185,12 @@ export default function Home() {
             </motion.div>
           </div>
         </section>
+
+        {/* FAQ Section */}
+        <FAQ />
+
+        {/* Newsletter Section */}
+        <Newsletter />
       </motion.main>
 
       <Footer ref={contactRef} />
