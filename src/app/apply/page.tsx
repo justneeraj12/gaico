@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Header from '../components/Header'
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
@@ -8,6 +8,7 @@ import { Input } from "../components/ui/input"
 import { Textarea } from "../components/ui/textarea"
 import { Button } from "../components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select"
+import { toast } from "../components/ui/use-toast"
 
 export default function Apply() {
   const [formData, setFormData] = useState({
@@ -22,9 +23,6 @@ export default function Apply() {
     useOfFunds: ''
   })
 
-  const servicesRef = useRef<HTMLElement>(null)
-  const contactRef = useRef<HTMLElement>(null)
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
@@ -36,13 +34,63 @@ export default function Apply() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Form submitted:', formData)
-    // Here you would typically send the data to your backend
+    
+    if (Object.values(formData).some(value => value === '')) {
+      toast({
+        title: "Error",
+        description: "Please enter details first",
+        variant: "destructive"
+      })
+      return
+    }
+
+    const emailBody = `
+Application Details:
+
+Name: ${formData.name}
+Email: ${formData.email}
+Phone: ${formData.phone}
+
+Company Name: ${formData.companyName}
+Company Website: ${formData.companyWebsite}
+Industry: ${formData.industry}
+
+Elevator Pitch:
+${formData.pitch}
+
+Funding Amount: $${formData.fundingAmount}
+
+Use of Funds:
+${formData.useOfFunds}
+    `
+
+    // Here you would typically send the email using your preferred method
+    // For demonstration, we'll log it to the console
+    console.log('Sending email to invest@gaico.in:')
+    console.log(emailBody)
+
+    // Reset the form
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      companyName: '',
+      companyWebsite: '',
+      industry: '',
+      pitch: '',
+      fundingAmount: '',
+      useOfFunds: ''
+    })
+
+    toast({
+      title: "Application Submitted",
+      description: "Thank you for your application. We'll review it and get back to you soon.",
+    })
   }
 
   return (
     <div className="min-h-screen bg-green-950 text-green-100">
-      <Header servicesRef={servicesRef} contactRef={contactRef} />
+      <Header />
       <main className="pt-24 pb-12">
         <section className="py-20 px-4">
           <div className="max-w-3xl mx-auto">

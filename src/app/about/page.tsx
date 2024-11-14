@@ -1,212 +1,185 @@
 'use client'
 
-import { useRef } from 'react'
+import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { Card, CardContent } from "../components/ui/card"
 import { Input } from "../components/ui/input"
 import { Textarea } from "../components/ui/textarea"
 import { Button } from "../components/ui/button"
-import { Card } from "../components/ui/card"
-import Image from 'next/image'
+import { toast } from "../components/ui/use-toast"
 
-const timelineEvents = [
-  { year: "2020", title: "Foundation", description: "Greenville Angel Investment Co. was established with a vision to support innovative startups." },
-  { year: "2021", title: "First Investment", description: "Successfully completed our first round of investments in 5 promising startups." },
-  { year: "2022", title: "Portfolio Expansion", description: "Expanded our portfolio to include 10+ companies across various sectors." },
-  { year: "2023", title: "Global Reach", description: "Extended our network internationally and launched our startup accelerator program." },
-  { year: "2024", title: "Future Growth", description: "Continuing to grow and support the next generation of innovative companies." }
+const teamMembers = [
+  { name: "John Doe", role: "Founder & CEO", image: "/placeholder.svg?height=300&width=300" },
+  { name: "Jane Smith", role: "Chief Investment Officer", image: "/placeholder.svg?height=300&width=300" },
+  { name: "Mike Johnson", role: "Head of Operations", image: "/placeholder.svg?height=300&width=300" },
+  { name: "Sarah Brown", role: "Lead Startup Advisor", image: "/placeholder.svg?height=300&width=300" },
 ]
 
-const founders = [
-  {
-    name: "Sarah Johnson",
-    role: "Founder & CEO",
-    bio: "Former VP at Goldman Sachs with 15+ years of investment experience.",
-    image: "/placeholder.svg?height=400&width=400"
-  },
-  {
-    name: "Michael Chen",
-    role: "Co-Founder & CTO",
-    bio: "Serial entrepreneur with multiple successful exits in the tech sector.",
-    image: "/placeholder.svg?height=400&width=400"
-  },
-  {
-    name: "David Kumar",
-    role: "Co-Founder & COO",
-    bio: "20+ years of operational experience in scaling startups to unicorns.",
-    image: "/placeholder.svg?height=400&width=400"
-  }
+const timeline = [
+  { year: 2015, event: "Greenvile Angel Investment Co. founded" },
+  { year: 2017, event: "First successful exit: TechStart acquired for $50M" },
+  { year: 2019, event: "Launched Greenvile Incubator Program" },
+  { year: 2021, event: "Expanded to international markets" },
+  { year: 2023, event: "Reached $100M in total investments" },
 ]
 
 export default function About() {
-  const servicesRef = useRef(null);
-  const contactRef = useRef(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  })
+  const servicesRef = useRef(null)
+  const contactRef = useRef(null)
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    if (!formData.name || !formData.email || !formData.message) {
+      toast({
+        title: "Error",
+        description: "Please enter details first",
+        variant: "destructive"
+      })
+      return
+    }
+
+    const emailBody = `
+Name: ${formData.name}
+Email: ${formData.email}
+
+Message:
+${formData.message}
+    `
+
+    console.log('Sending email to invest@gaico.in:')
+    console.log(emailBody)
+
+    setFormData({ name: '', email: '', message: '' })
+    toast({
+      title: "Message Sent",
+      description: "Thank you for your message. We'll get back to you soon.",
+    })
+  }
 
   return (
-    <div className="min-h-screen bg-green-950">
+    <div className="min-h-screen bg-green-950 text-green-100">
       <Header servicesRef={servicesRef} contactRef={contactRef} />
-      <main className="pt-24 px-4 pb-12">
-        <div className="max-w-6xl mx-auto">
-          <motion.h1 
-            className="text-4xl font-bold text-white mb-8"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            About Greenville Angel Investment Co.
-          </motion.h1>
-
-          {/* Timeline Section */}
-          <section className="mb-20">
-            <motion.h2 
-              className="text-3xl font-bold text-white mb-12 text-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
+      <main className="pt-24 pb-12">
+        <section ref={servicesRef} className="py-20 px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.h1 
+              className="text-5xl font-bold mb-6 text-green-400"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
             >
-              Our Journey
-            </motion.h2>
-            <div className="relative">
-              {/* Timeline line */}
-              <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-green-400/20" />
-              
-              {/* Timeline events */}
-              {timelineEvents.map((event, index) => (
-                <motion.div
-                  key={event.year}
-                  className={`flex items-center mb-12 ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.2 }}
-                >
-                  <div className={`w-1/2 flex ${index % 2 === 0 ? 'justify-end pr-8' : 'justify-start pl-8'}`}>
-                    <div className="max-w-md">
-                      <div className="text-green-400 font-bold text-xl mb-2">{event.year}</div>
-                      <h3 className="text-white font-semibold text-lg mb-2">{event.title}</h3>
-                      <p className="text-green-100">{event.description}</p>
-                    </div>
-                  </div>
-                  {/* Timeline dot */}
-                  <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-green-400 rounded-full" />
-                </motion.div>
-              ))}
-            </div>
-          </section>
-
-          {/* Founders Section */}
-          <section className="mb-20">
-            <motion.h2 
-              className="text-3xl font-bold text-white mb-12 text-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
+              About Greenvile
+            </motion.h1>
+            <motion.p 
+              className="text-xl mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
             >
-              Meet Our Founders
-            </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {founders.map((founder, index) => (
-                <motion.div
-                  key={founder.name}
-                  className="text-center"
+              We are a team of passionate investors and entrepreneurs dedicated to nurturing the next generation of innovative startups. Our mission is to provide not just capital, but also the guidance and resources needed to turn groundbreaking ideas into successful businesses.
+            </motion.p>
+          </div>
+        </section>
+
+        <section className="py-20 px-4 bg-green-900/20">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl font-bold mb-12 text-center text-green-400">Our Team</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {teamMembers.map((member, index) => (
+                <motion.div 
+                  key={member.name}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.2 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <div className="mb-4 relative mx-auto w-48 h-48 rounded-full overflow-hidden">
-                    <Image
-                      src={founder.image}
-                      alt={founder.name}
-                      width={192}
-                      height={192}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                  <h3 className="text-white font-bold text-xl mb-1">{founder.name}</h3>
-                  <p className="text-green-400 mb-2">{founder.role}</p>
-                  <p className="text-green-100">{founder.bio}</p>
+                  <Card className="bg-green-950 border-green-800">
+                    <CardContent className="p-4 text-center">
+                      <Image
+                        src={member.image}
+                        alt={member.name}
+                        width={200}
+                        height={200}
+                        className="rounded-full mx-auto mb-4"
+                      />
+                      <h3 className="text-xl font-semibold mb-2 text-green-400">{member.name}</h3>
+                      <p className="text-green-300">{member.role}</p>
+                    </CardContent>
+                  </Card>
                 </motion.div>
               ))}
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* Contact Section */}
-          <section className="grid md:grid-cols-2 gap-12">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <Card className="p-6 bg-green-900/20 border-green-800">
-                <h2 className="text-2xl font-bold text-white mb-6">Send Us a Message</h2>
-                <form className="space-y-4">
-                  <div>
-                    <Input 
-                      placeholder="Name" 
-                      className="bg-green-900/30 border-green-800 text-white placeholder:text-green-400/50"
-                    />
-                  </div>
-                  <div>
-                    <Input 
-                      type="email" 
-                      placeholder="Email" 
-                      className="bg-green-900/30 border-green-800 text-white placeholder:text-green-400/50"
-                    />
-                  </div>
-                  <div>
-                    <Input 
-                      placeholder="Phone Number" 
-                      className="bg-green-900/30 border-green-800 text-white placeholder:text-green-400/50"
-                    />
-                  </div>
-                  <div>
-                    <Textarea 
-                      placeholder="Your Message" 
-                      className="bg-green-900/30 border-green-800 text-white placeholder:text-green-400/50 min-h-[150px]"
-                    />
-                  </div>
-                  <Button className="w-full bg-green-400 text-green-950 hover:bg-green-300">
-                    Send Message
-                  </Button>
+        <section className="py-20 px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold mb-12 text-center text-green-400">Our Journey</h2>
+            <div className="space-y-8">
+              {timeline.map((item, index) => (
+                <motion.div 
+                  key={item.year}
+                  className="flex items-center space-x-4"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <div className="w-24 text-right font-bold text-green-400">{item.year}</div>
+                  <div className="w-4 h-4 rounded-full bg-green-400"></div>
+                  <div className="flex-1 p-4 bg-green-900/20 rounded-lg">{item.event}</div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section ref={contactRef} className="py-20 px-4 bg-green-900/20">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold mb-12 text-center text-green-400">Contact Us</h2>
+            <Card className="bg-green-950 border-green-800">
+              <CardContent className="p-6">
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <Input 
+                    name="name" 
+                    placeholder="Your Name" 
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required 
+                  />
+                  <Input 
+                    name="email" 
+                    type="email" 
+                    placeholder="Your Email" 
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required 
+                  />
+                  <Textarea 
+                    name="message" 
+                    placeholder="Your Message" 
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required 
+                  />
+                  <Button type="submit">Send Message</Button>
                 </form>
-              </Card>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
-              className="space-y-8"
-            >
-              <div>
-                <h3 className="text-green-400 font-semibold mb-2">Visit Us</h3>
-                <p className="text-white">
-                  Genesis Startup Studio<br />
-                  16th Cross Rd Narayanapura<br />
-                  Bengaluru, Karnataka 560077
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-green-400 font-semibold mb-2">Call Us</h3>
-                <p className="text-white">+91 914 850 2999</p>
-              </div>
-
-              <div>
-                <h3 className="text-green-400 font-semibold mb-2">Email Us</h3>
-                <p className="text-white">invest@gaico.in</p>
-              </div>
-
-              <div>
-                <h3 className="text-green-400 font-semibold mb-2">Office Hours</h3>
-                <p className="text-white">
-                  Monday - Friday: 9:00 AM - 6:00 PM<br />
-                  Weekend: By Appointment
-                </p>
-              </div>
-            </motion.div>
-          </section>
-        </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
