@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import Header from '../components/Header'
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
@@ -22,6 +22,9 @@ export default function Apply() {
     useOfFunds: ''
   })
 
+  const servicesRef = useRef<HTMLElement>(null)
+  const contactRef = useRef<HTMLElement>(null)
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
@@ -39,7 +42,7 @@ export default function Apply() {
 
   return (
     <div className="min-h-screen bg-green-950 text-green-100">
-      <Header />
+      <Header servicesRef={servicesRef} contactRef={contactRef} />
       <main className="pt-24 pb-12">
         <section className="py-20 px-4">
           <div className="max-w-3xl mx-auto">
