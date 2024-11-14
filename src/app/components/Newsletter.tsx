@@ -3,10 +3,11 @@
 import { useState } from 'react'
 import { Input } from "../components/ui/input"
 import { Button } from "../components/ui/button"
-import { toast } from "../components/ui/use-toast"
+import { useToast } from "../components/ui/use-toast"
 
 export default function Newsletter() {
   const [email, setEmail] = useState('')
+  const { toast } = useToast()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
