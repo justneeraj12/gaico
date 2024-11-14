@@ -1,6 +1,7 @@
+// File: @/app/apply/page.tsx
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Header from '../components/Header'
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
@@ -32,55 +33,20 @@ export default function Apply() {
     setFormData(prev => ({ ...prev, industry: value }))
   }
 
+  const validateForm = () => {
+    return Object.values(formData).every(value => value.trim() !== '')
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (Object.values(formData).some(value => value === '')) {
+    if (!validateForm()) {
       toast({
-        title: "Error",
-        description: "Please enter details first",
-        variant: "destructive"
+        title: "Form Incomplete",
+        description: "Please fill out all fields before submitting.",
       })
       return
     }
-
-    const emailBody = `
-Application Details:
-
-Name: ${formData.name}
-Email: ${formData.email}
-Phone: ${formData.phone}
-
-Company Name: ${formData.companyName}
-Company Website: ${formData.companyWebsite}
-Industry: ${formData.industry}
-
-Elevator Pitch:
-${formData.pitch}
-
-Funding Amount: $${formData.fundingAmount}
-
-Use of Funds:
-${formData.useOfFunds}
-    `
-
-    // Here you would typically send the email using your preferred method
-    // For demonstration, we'll log it to the console
-    console.log('Sending email to invest@gaico.in:')
-    console.log(emailBody)
-
-    // Reset the form
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      companyName: '',
-      companyWebsite: '',
-      industry: '',
-      pitch: '',
-      fundingAmount: '',
-      useOfFunds: ''
-    })
 
     toast({
       title: "Application Submitted",
@@ -88,9 +54,22 @@ ${formData.useOfFunds}
     })
   }
 
+  const servicesRef = useRef<HTMLElement>(null)
+  const contactRef = useRef<HTMLElement>(null)
+
+  // Ensure the component is only rendered on the client
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-green-950 text-green-100">
-      <Header />
+      <Header servicesRef={servicesRef} contactRef={contactRef} />
       <main className="pt-24 pb-12">
         <section className="py-20 px-4">
           <div className="max-w-3xl mx-auto">
